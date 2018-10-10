@@ -1,6 +1,6 @@
 import { addSuccessHandler } from 'ember-service-worker/service-worker-registration'
 
-function hasServiceWorkerUpdate(resolve) {
+function addUpdateHandler(resolve) {
   addSuccessHandler(function(reg) {
     reg.onupdatefound = function() {
       const { installing } = reg;
@@ -23,8 +23,8 @@ const disablePolyfill = ({
   }
 });
 
-window.hasServiceWorkerUpdate =
-  arePromisesSupported
-  ? new Promise(hasServiceWorkerUpdate)
-  : disablePolyfill
-
+window.setupEmberServiceWorkerUpdateNofify = function() {
+  return arePromisesSupported
+    ? new Promise(addUpdateHandler)
+    : disablePolyfill;
+};
